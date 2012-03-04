@@ -1,0 +1,113 @@
+topLevel ::=
+decl* (pattern | grammarContent*)
+decl ::=
+("namespace" identifierOrKeyword "=" namespaceURILiteral)
+| ("default" "namespace" [identifierOrKeyword] "=" namespaceURILiteral)
+| ("datatypes" identifierOrKeyword "=" literal)
+pattern ::=
+("element" nameClass "{" pattern "}")
+| ("attribute" nameClass "{" pattern "}")
+| (pattern ("," pattern)+)
+| (pattern ("&" pattern)+)
+| (pattern ("|" pattern)+)
+| (pattern "?")
+| (pattern "*")
+| (pattern "+")
+| ("list" "{" pattern "}")
+| ("mixed" "{" pattern "}")
+| identifier
+| ("parent" identifier)
+| "empty"
+| "text"
+| ([datatypeName] datatypeValue)
+| (datatypeName ["{" param* "}"] [exceptPattern])
+| "notAllowed"
+| ("external" anyURILiteral [inherit])
+| ("grammar" "{" grammarContent* "}")
+| ("(" pattern ")")
+param ::=
+identifierOrKeyword "=" literal
+exceptPattern ::=
+"-" pattern
+grammarContent ::=
+start
+| define
+| ("div" "{" grammarContent* "}")
+| ("include" anyURILiteral [inherit] ["{" includeContent* "}"])
+includeContent ::=
+define
+| start
+| ("div" "{" includeContent* "}")
+start ::=
+"start" assignMethod pattern
+define ::=
+identifier assignMethod pattern
+assignMethod ::=
+"="
+| "|="
+| "&="
+nameClass ::=
+name
+| (nsName [exceptNameClass])
+| (anyName [exceptNameClass])
+| (nameClass "|" nameClass)
+| ("(" nameClass ")")
+name ::=
+identifierOrKeyword
+| CName
+exceptNameClass ::=
+"-" nameClass
+datatypeName ::=
+CName
+| "string"
+| "token"
+datatypeValue ::=
+literal
+anyURILiteral ::=
+literal
+namespaceURILiteral ::=
+literal
+| "inherit"
+inherit ::=
+"inherit" "=" identifierOrKeyword
+identifierOrKeyword ::=
+identifier
+| keyword
+identifier ::=
+(NCName - keyword)
+| quotedIdentifier
+quotedIdentifier ::=
+"\" NCName
+CName ::=
+NCName ":" NCName
+nsName ::=
+NCName ":*"
+anyName ::=
+"*"
+literal ::=
+literalSegment ("~" literalSegment)+
+literalSegment ::=
+('"' (Char - ('"' | newline))* '"')
+| ("'" (Char - ("'" | newline))* "'")
+| ('"""' (['"'] ['"'] (Char - '"'))* '"""')
+| ("'''" (["'"] ["'"] (Char - "'"))* "'''")
+keyword ::=
+"attribute"
+| "default"
+| "datatypes"
+| "div"
+| "element"
+| "empty"
+| "external"
+| "grammar"
+| "include"
+| "inherit"
+| "list"
+| "mixed"
+| "namespace"
+| "notAllowed"
+| "parent"
+| "start"
+| "string"
+| "text"
+| "token"
