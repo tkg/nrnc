@@ -1,7 +1,11 @@
-Emacs mode for RELAX NG compact sytax
-=====================================
+Emacs mode for RELAX NG compact syntax
+======================================
 
 Requires rnc-mode.el by David Rosenberg, Pantor Engineering AB.
 
 A work-in-progress for Semantic parsing of RELAX NG compact syntax
 files.
+
+Currently doesn't do any font-lock highlighting because that will
+eventually be based on the Semantic parsing rather than on regular
+expressions as in `rnc-mode'.

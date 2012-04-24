@@ -1,10 +1,12 @@
-;;; wisent-dot.wy --- GraphViz DOT file parser
+;;; wisent-rnc.wy --- RELAX NG compact syntax file parser
 
+;; Copyright (C) 2012 Tony Graham
+;; Initially based on wisent-dot.wy
 ;; Copyright (C) 2003, 2004 Eric M. Ludlam
 
-;; Author: Eric Ludlam <zappo@gnu.org>
+;; Author: Tony Graham <tgraham@mentea.net>
 ;; Keywords: syntax
-;; X-RCS: $Id: wisent-dot.wy,v 1.7 2005/09/30 20:07:11 zappo Exp $
+;; X-RCS: $Id$
 
 ;; This file is not part of GNU Emacs.
 
@@ -106,11 +108,11 @@ rnc-file
   ;
 
 decl
-  : NAMESPACE symbol EQUAL string
+  : DEFAULT NAMESPACE symbol EQUAL string
     {
      (TAG $2 'namespace)
     }
-  | DEFAULT NAMESPACE symbol EQUAL string
+  | NAMESPACE symbol EQUAL string
     {
      (TAG $3 'namespace)
     }
@@ -160,36 +162,39 @@ define
 pattern-block
   : LBRACE
     ()
-  | RBRACE
-    ()
   | COMMA
     ()
   | AND
     ()
   | OR
     ()
-  | pattern OPT
-  | pattern PLUS
-  | pattern MUL
-  | pattern
+  | pattern opt_occur
+  | pattern opt_occur RBRACE
+  ;
+
+opt_occur
+  : ;;EMPTY
+  | OPT
+  | PLUS
+  | MUL
   ;
 
 %%
 
-(define-lex wisent-dot-lexer
-  "Lexical analyzer that handles DOT buffers.
+(define-lex wisent-rnc-lexer
+  "Lexical analyzer that handles RELAX NG compact syntax buffers.
 It ignores whitespace, newlines and comments."
   semantic-lex-ignore-whitespace
   semantic-lex-ignore-newline
   semantic-lex-ignore-comments
-  wisent-dot-wy--<keyword>-keyword-analyzer
-  wisent-dot-wy--<symbol>-regexp-analyzer
-  wisent-dot-wy--<block>-block-analyzer
+  wisent-rnc-wy--<keyword>-keyword-analyzer
+  wisent-rnc-wy--<symbol>-regexp-analyzer
+  wisent-rnc-wy--<block>-block-analyzer
   ;; ?? semantic-lex-close-paren
-  wisent-dot-wy--<number>-regexp-analyzer
-  wisent-dot-wy--<string>-sexp-analyzer
-  wisent-dot-wy--<punctuation>-string-analyzer
+  wisent-rnc-wy--<number>-regexp-analyzer
+  wisent-rnc-wy--<string>-sexp-analyzer
+  wisent-rnc-wy--<punctuation>-string-analyzer
   semantic-lex-default-action
   )
 
-;;; wisent-dot.wy ends here
+;;; wisent-rnc.wy ends here

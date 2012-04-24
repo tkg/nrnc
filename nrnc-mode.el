@@ -86,6 +86,11 @@
    senator-step-at-tag-classes '(start element attribute)
    ))
 
+(defun nrnc-debug-setup ()
+  "Turn on debugging stuff."
+  (interactive)
+  (semantic-show-unmatched-syntax-mode t))
+
 ;;;###autoload
 (defun nrnc-mode ()
   "Major mode for editing RELAX NG compact syntax."
