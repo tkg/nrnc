@@ -1,0 +1,4 @@
+namespace c = "d"
+start = element b { "literal" | "other" }
+a = element a { text, attribute e { notAllowed? } }
+e = attribute e { notAllowed? }
