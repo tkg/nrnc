@@ -36,6 +36,7 @@
 %start rnc-file
 ;; Needed for EXPANDFULL
 %start pattern-block
+%start pattern-group
 %start pattern
 
 ;;; KEYWORDS
@@ -143,6 +144,8 @@ pattern
     (TAG $2 'element :members (EXPANDFULL $3 pattern-block))
   | ATTRIBUTE symbol BRACE_BLOCK
     (TAG "attribute" 'elements :attributes (EXPANDFULL $3 pattern-block))
+  | PAREN_BLOCK
+    (EXPANDFULL $1 pattern-group)
   | symbol
     (TAG $1 'identifier)
   | string
@@ -170,6 +173,23 @@ pattern-block
     ()
   | pattern opt_occur
   | pattern opt_occur RBRACE
+  ;
+
+pattern-group
+  : LPAREN
+    ()
+  | RPAREN
+    ()
+  | COMMA
+    ()
+  | AND
+    ()
+  | OR
+    ()
+  | pattern COMMA
+  | pattern AND
+  | pattern OR
+  | pattern RPAREN
   ;
 
 opt_occur
