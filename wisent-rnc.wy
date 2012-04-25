@@ -35,6 +35,7 @@
 
 %start rnc-file
 ;; Needed for EXPANDFULL
+%start grammar-content-group
 %start pattern-block
 %start pattern-group
 %start pattern
@@ -68,8 +69,8 @@
 %token <punctuation> EQUAL    "="
 %token <punctuation> OREQUAL  "|="
 %token <punctuation> ANDEQUAL "&="
-%token <punctuation> SEMI   ";"
-%token <punctuation> COMMA  ","
+%token <punctuation> SEMI     ";"
+%token <punctuation> COMMA    ","
 %token <punctuation> AND      "&"
 %token <punctuation> OR       "|"
 %token <punctuation> OPT      "?"
@@ -111,15 +112,15 @@ rnc-file
 decl
   : DEFAULT NAMESPACE symbol EQUAL string
     {
-     (TAG $2 'namespace)
+     (TAG $3 'namespace)
     }
   | NAMESPACE symbol EQUAL string
     {
-     (TAG $3 'namespace)
+     (TAG $2 'namespace)
     }
   | DATATYPES symbol EQUAL string
     {
-     (TAG $2 'namespace)
+     (TAG $2 'datatype)
     }
   ;
 
@@ -130,7 +131,7 @@ start
 
 div
   : DIV BRACE_BLOCK
-    (TAG "DIV" 'div :members (EXPANDFULL $2 pattern-block))
+    (EXPANDFULL $2 grammar-content-group)
   ;
 
 assign-method
@@ -143,7 +144,7 @@ pattern
   : ELEMENT symbol BRACE_BLOCK
     (TAG $2 'element :members (EXPANDFULL $3 pattern-block))
   | ATTRIBUTE symbol BRACE_BLOCK
-    (TAG "attribute" 'elements :attributes (EXPANDFULL $3 pattern-block))
+    (TAG "attribute" 'elements :members (EXPANDFULL $3 pattern-block))
   | PAREN_BLOCK
     (EXPANDFULL $1 pattern-group)
   | symbol
@@ -158,12 +159,14 @@ pattern
   ;
 
 define
-  : symbol assign-method pattern-block
-    (TAG $1 'define :attributes (EXPANDFULL $3 pattern-block))
+  : symbol assign-method pattern
+    (TAG $1 'define :attributes (EXPANDFULL $3 pattern))
   ;
 
 pattern-block
   : LBRACE
+    ()
+  | RBRACE
     ()
   | COMMA
     ()
@@ -171,8 +174,8 @@ pattern-block
     ()
   | OR
     ()
-  | pattern opt_occur
-  | pattern opt_occur RBRACE
+  | pattern opt-occur
+  | pattern opt-occur RBRACE
   ;
 
 pattern-group
@@ -192,11 +195,27 @@ pattern-group
   | pattern RPAREN
   ;
 
-opt_occur
+opt-occur
   : ;;EMPTY
   | OPT
   | PLUS
   | MUL
+  ;
+
+grammar-content-group
+  : ;;EMPTY
+  | LBRACE
+    ()
+  | RBRACE
+    ()
+  | grammar-content
+  | grammar-content RBRACE
+  ;
+
+grammar-content
+  : start
+  | define
+  | div
   ;
 
 %%
