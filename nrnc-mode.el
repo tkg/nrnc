@@ -80,6 +80,7 @@
    semantic-symbol->name-assoc-list
    '((start . "start")
      (define . "define")
+     (datatype . "datatype")
      (element . "element")
      )
    ;; Navigation
@@ -117,6 +118,7 @@
     (modify-syntax-entry ?- "w   " rnc-syntax-table)
     (modify-syntax-entry ?_ "w   " rnc-syntax-table)
     (modify-syntax-entry ?: "_" rnc-syntax-table)
+    (modify-syntax-entry ?? "_" rnc-syntax-table)
     (set-syntax-table rnc-syntax-table))
   
   (modify-syntax-entry ?= ".")
