@@ -1,7 +1,9 @@
 Emacs mode for RELAX NG compact syntax
 ======================================
 
-Requires rnc-mode.el by David Rosenberg, Pantor Engineering AB.
+nrnr-mode is based on rnc-mode.el by David Rosenberg, Pantor
+Engineering AB.  It does not currently require rnc-mode.el to be
+loaded.
 
 A work-in-progress for Semantic parsing of RELAX NG compact syntax
 files.
