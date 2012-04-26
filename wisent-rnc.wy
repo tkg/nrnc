@@ -36,6 +36,7 @@
 %start rnc-file
 ;; Needed for EXPANDFULL
 %start grammar-content-group
+%start param-group
 %start pattern-block
 %start pattern-group
 %start pattern
@@ -94,8 +95,11 @@
 %type  <symbol>
 %token <symbol> symbol
 
+%type  <cname> syntax "\\(\\sw\\)+:\\(\\sw\\)+"
+%token <cname> cname
+
 %type  <string>
-%token <string> string
+%token <string> literal
 
 %type  <number>
 %token <number> number
@@ -110,15 +114,15 @@ rnc-file
   ;
 
 decl
-  : DEFAULT NAMESPACE symbol EQUAL string
+  : DEFAULT NAMESPACE symbol EQUAL literal
     {
      (TAG $3 'namespace)
     }
-  | NAMESPACE symbol EQUAL string
+  | NAMESPACE symbol EQUAL literal
     {
      (TAG $2 'namespace)
     }
-  | DATATYPES symbol EQUAL string
+  | DATATYPES symbol EQUAL literal
     {
      (TAG $2 'datatype)
     }
@@ -149,13 +153,15 @@ pattern
     (EXPANDFULL $1 pattern-group)
   | symbol
     (TAG $1 'identifier)
-  | string
   | EMPTY
     (TAG "EMPTY" 'empty)
-  | NOTALLOWED
-    (TAG "NOTALLOWED" 'notallowed)
   | TEXT
     (TAG "TEXT" 'text)
+  | datatype-name-opt datatype-value
+  | datatype-name BRACE_BLOCK
+    (EXPANDFULL $2 param-group)
+  | NOTALLOWED
+    (TAG "NOTALLOWED" 'notallowed)
   ;
 
 define
@@ -195,11 +201,45 @@ pattern-group
   | pattern RPAREN
   ;
 
+param-group
+  : ;;EMPTY
+  | LBRACE
+    ()
+  | RBRACE
+    ()
+  | param
+  | param RPAREN
+  ;
+
+param
+  : symbol EQUAL literal
+    ()
+  ;
+
 opt-occur
   : ;;EMPTY
   | OPT
   | PLUS
   | MUL
+  ;
+
+datatype-name-opt
+  : ;;EMPTY
+  | datatype-name
+  ;
+
+datatype-name
+  : cname
+    ()
+  | STRING
+    ()
+  | TOKEN
+    ()
+  ;
+
+datatype-value
+  : literal
+    ()
   ;
 
 grammar-content-group
@@ -228,6 +268,7 @@ It ignores whitespace, newlines and comments."
   semantic-lex-ignore-comments
   wisent-rnc-wy--<keyword>-keyword-analyzer
   wisent-rnc-wy--<symbol>-regexp-analyzer
+  wisent-rnc-wy--<cname>-regexp-analyzer
   wisent-rnc-wy--<block>-block-analyzer
   ;; ?? semantic-lex-close-paren
   wisent-rnc-wy--<number>-regexp-analyzer
