@@ -1,113 +1,113 @@
 topLevel ::=
-decl* (pattern | grammarContent*)
+  decl* (pattern | grammarContent*)
 decl ::=
-("namespace" identifierOrKeyword "=" namespaceURILiteral)
-| ("default" "namespace" [identifierOrKeyword] "=" namespaceURILiteral)
-| ("datatypes" identifierOrKeyword "=" literal)
+  ("namespace" identifierOrKeyword "=" namespaceURILiteral)
+  | ("default" "namespace" [identifierOrKeyword] "=" namespaceURILiteral)
+  | ("datatypes" identifierOrKeyword "=" literal)
 pattern ::=
-("element" nameClass "{" pattern "}")
-| ("attribute" nameClass "{" pattern "}")
-| (pattern ("," pattern)+)
-| (pattern ("&" pattern)+)
-| (pattern ("|" pattern)+)
-| (pattern "?")
-| (pattern "*")
-| (pattern "+")
-| ("list" "{" pattern "}")
-| ("mixed" "{" pattern "}")
-| identifier
-| ("parent" identifier)
-| "empty"
-| "text"
-| ([datatypeName] datatypeValue)
-| (datatypeName ["{" param* "}"] [exceptPattern])
-| "notAllowed"
-| ("external" anyURILiteral [inherit])
-| ("grammar" "{" grammarContent* "}")
-| ("(" pattern ")")
+  ("element" nameClass "{" pattern "}")
+  | ("attribute" nameClass "{" pattern "}")
+  | (pattern ("," pattern)+)
+  | (pattern ("&" pattern)+)
+  | (pattern ("|" pattern)+)
+  | (pattern "?")
+  | (pattern "*")
+  | (pattern "+")
+  | ("list" "{" pattern "}")
+  | ("mixed" "{" pattern "}")
+  | identifier
+  | ("parent" identifier)
+  | "empty"
+  | "text"
+  | ([datatypeName] datatypeValue)
+  | (datatypeName ["{" param* "}"] [exceptPattern])
+  | "notAllowed"
+  | ("external" anyURILiteral [inherit])
+  | ("grammar" "{" grammarContent* "}")
+  | ("(" pattern ")")
 param ::=
-identifierOrKeyword "=" literal
+  identifierOrKeyword "=" literal
 exceptPattern ::=
-"-" pattern
+  "-" pattern
 grammarContent ::=
-start
-| define
-| ("div" "{" grammarContent* "}")
-| ("include" anyURILiteral [inherit] ["{" includeContent* "}"])
+  start
+  | define
+  | ("div" "{" grammarContent* "}")
+  | ("include" anyURILiteral [inherit] ["{" includeContent* "}"])
 includeContent ::=
-define
-| start
-| ("div" "{" includeContent* "}")
+  define
+  | start
+  | ("div" "{" includeContent* "}")
 start ::=
-"start" assignMethod pattern
+  "start" assignMethod pattern
 define ::=
-identifier assignMethod pattern
+  identifier assignMethod pattern
 assignMethod ::=
-"="
-| "|="
-| "&="
+  "="
+  | "|="
+  | "&="
 nameClass ::=
-name
-| (nsName [exceptNameClass])
-| (anyName [exceptNameClass])
-| (nameClass "|" nameClass)
-| ("(" nameClass ")")
+  name
+  | (nsName [exceptNameClass])
+  | (anyName [exceptNameClass])
+  | (nameClass "|" nameClass)
+  | ("(" nameClass ")")
 name ::=
-identifierOrKeyword
-| CName
+  identifierOrKeyword
+  | CName
 exceptNameClass ::=
-"-" nameClass
+  "-" nameClass
 datatypeName ::=
-CName
-| "string"
-| "token"
+  CName
+  | "string"
+  | "token"
 datatypeValue ::=
-literal
+  literal
 anyURILiteral ::=
-literal
+  literal
 namespaceURILiteral ::=
-literal
-| "inherit"
+  literal
+  | "inherit"
 inherit ::=
-"inherit" "=" identifierOrKeyword
+  "inherit" "=" identifierOrKeyword
 identifierOrKeyword ::=
-identifier
-| keyword
+  identifier
+  | keyword
 identifier ::=
-(NCName - keyword)
-| quotedIdentifier
+  (NCName - keyword)
+  | quotedIdentifier
 quotedIdentifier ::=
-"\" NCName
+  "\" NCName
 CName ::=
-NCName ":" NCName
+  NCName ":" NCName
 nsName ::=
-NCName ":*"
+  NCName ":*"
 anyName ::=
-"*"
+  "*"
 literal ::=
-literalSegment ("~" literalSegment)+
+  literalSegment ("~" literalSegment)+
 literalSegment ::=
-('"' (Char - ('"' | newline))* '"')
-| ("'" (Char - ("'" | newline))* "'")
-| ('"""' (['"'] ['"'] (Char - '"'))* '"""')
-| ("'''" (["'"] ["'"] (Char - "'"))* "'''")
+  ('"' (Char - ('"' | newline))* '"')
+  | ("'" (Char - ("'" | newline))* "'")
+  | ('"""' (['"'] ['"'] (Char - '"'))* '"""')
+  | ("'''" (["'"] ["'"] (Char - "'"))* "'''")
 keyword ::=
-"attribute"
-| "default"
-| "datatypes"
-| "div"
-| "element"
-| "empty"
-| "external"
-| "grammar"
-| "include"
-| "inherit"
-| "list"
-| "mixed"
-| "namespace"
-| "notAllowed"
-| "parent"
-| "start"
-| "string"
-| "text"
-| "token"
+  "attribute"
+  | "default"
+  | "datatypes"
+  | "div"
+  | "element"
+  | "empty"
+  | "external"
+  | "grammar"
+  | "include"
+  | "inherit"
+  | "list"
+  | "mixed"
+  | "namespace"
+  | "notAllowed"
+  | "parent"
+  | "start"
+  | "string"
+  | "text"
+  | "token"
