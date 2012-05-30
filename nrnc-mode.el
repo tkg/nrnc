@@ -1,4 +1,4 @@
-;;; wisent-rnc.el --- New RNC mode
+;;; nrnc-mode.el --- New RNC mode
 
 ;; Copyright (C) 2012 Tony Graham
 ;; Originally slavishly copied from wisent-dot.el
@@ -81,6 +81,7 @@
    '((start . "start")
      (define . "define")
      (datatype . "datatype")
+     (namespace . "namespace")
      (element . "element")
      )
    ;; Navigation
